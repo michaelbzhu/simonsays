@@ -11,13 +11,11 @@ export default function Home() {
 
   const testPing = async () => {
     const formData = new FormData();
-    formData.append("message", "blue111");
-
+    formData.append("message", "INPB");
     const response = await fetch("/api/ping", {
       method: "POST",
       body: formData,
     });
-
     // const data = await response.json();
   };
 
@@ -42,7 +40,7 @@ export default function Home() {
           [start game]
         </div>
         <div className="cursor-pointer" onClick={testPing}>
-          [test, send on222]
+          [test blue]
         </div>
       </div>
     );

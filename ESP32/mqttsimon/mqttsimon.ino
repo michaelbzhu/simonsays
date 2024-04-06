@@ -20,6 +20,12 @@ unsigned long previousMillis = 0;        // will store last time LED was updated
 const long interval = 500;              // interval at which to keep the LED on (milliseconds)
 unsigned long currentMillis = millis();
 
+//pinouts
+const int blue = 2;
+const int red = 22;
+const int green = 21;
+const int yellow = 19;
+
 void setup_wifi() {
   // Connect to Wi-Fi network with SSID and password
   Serial.print("Connecting to ");
@@ -34,23 +40,6 @@ void setup_wifi() {
   Serial.println("WiFi connected.");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-}
-
-void callback(char* topic, byte* payload, unsigned int length) {
-  // Handle message arrived
-  payload[length] = '\0'; // Null-terminate the payload
-  String message = String((char*)payload);
-  // Example: Turn an LED on if the message is "on"
-  Serial.println("GOt a message!");
-  Serial.println(message);
-  if(message == "blue111") {
-    digitalWrite(2, HIGH); //  flip LED on
-    previousMillis = currentMillis;
-    // Turn LED on
-  } else if(message == "off222") {
-    digitalWrite(2, LOW);  // flip LED on
-    // Turn LED off
-  }
 }
 
 void reconnect() {
@@ -72,12 +61,68 @@ void reconnect() {
   }
 }
 
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  // Handle message arrived
+  payload[length] = '\0'; // Null-terminate the payload
+  String message = String((char*)payload);
+  // Example: Turn an LED on if the message is "on"
+  Serial.println("Got a message!");
+  Serial.println(message);
+  if (message.startsWith("SEQ")) {
+    // Iterate through each character after "SEQ"
+    for (int i = 3; i < message.length(); i++) {
+      // Perform actions based on the character
+      switch (message.charAt(i)) {
+        case '0':
+          digitalWrite(red, HIGH);
+          delay(500);
+          digitalWrite(red, LOW);
+          break;
+        case '1':
+          digitalWrite(blue, HIGH);
+          delay(500);
+          digitalWrite(blue, LOW);
+          break;
+        case '2':
+          digitalWrite(green, HIGH);
+          delay(500);
+          digitalWrite(green, LOW);
+          break;
+        case '3':
+          digitalWrite(yellow, HIGH);
+          delay(500);
+          digitalWrite(yellow, LOW);
+          break;
+        delay(250);
+        // Add more cases if you have more characters/actions
+      }
+    }
+  } else {
+    if(message == "INPR") {
+      digitalWrite(red, HIGH); //  flip LED on    // Turn LED on
+    } else if(message == "INPB") {
+      digitalWrite(blue, HIGH);  // flip LED on
+    } else if(message == "INPG") {
+      digitalWrite(green, HIGH);  // flip LED on
+    } else if(message == "INPY") {
+      digitalWrite(yellow, HIGH);  // flip LED on
+    }
+  }
+  previousMillis = currentMillis;
+
+}
+
 void setup() {
 
   Serial.begin(115200);
 
   // Initialize the onboard LED pin as an output.
-  pinMode(2, OUTPUT);
+  pinMode(blue, OUTPUT);//blue
+  pinMode(red, OUTPUT);//red
+  pinMode(green, OUTPUT);//green
+  pinMode(yellow, OUTPUT);//yellow
+
   setup_wifi();
   client.setServer(mqttServer, mqttPort);
   client.setCallback(callback);
@@ -91,7 +136,11 @@ void loop() {
   currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
     // Check if the interval has passed
-    digitalWrite(2, LOW);                // Turn LED off
+    digitalWrite(blue, LOW);
+    digitalWrite(red, LOW);
+    digitalWrite(green, LOW);
+    digitalWrite(yellow, LOW);
+
   }
 
   // if (client.connect("ESP32ClientIced")) {
