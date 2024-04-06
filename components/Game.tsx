@@ -13,9 +13,9 @@ export const Game: FC<GameProps> = ({ failGame, winGame }) => {
   const game = getGameSingleton();
   const [level, setLevel] = useState(game.getCurrentLevel());
 
-  const onColorClick = (color: Color) => {
+  const onColorClick = async (color: Color) => {
     console.log(color);
-    const correct = game.userInput(color);
+    const correct = await game.userInput(color);
     setLevel(game.getCurrentLevel());
     if (!correct) {
       console.log("game over");
@@ -28,20 +28,20 @@ export const Game: FC<GameProps> = ({ failGame, winGame }) => {
     }
   };
 
-  const clickRed = () => {
-    onColorClick(Color.red);
+  const clickRed = async () => {
+    await onColorClick(Color.red);
   };
 
-  const clickBlue = () => {
-    onColorClick(Color.blue);
+  const clickBlue = async () => {
+    await onColorClick(Color.blue);
   };
 
-  const clickGreen = () => {
-    onColorClick(Color.green);
+  const clickGreen = async () => {
+    await onColorClick(Color.green);
   };
 
-  const clickYellow = () => {
-    onColorClick(Color.yellow);
+  const clickYellow = async () => {
+    await onColorClick(Color.yellow);
   };
 
   return (
