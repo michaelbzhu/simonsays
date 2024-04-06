@@ -94,9 +94,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
           delay(500);
           digitalWrite(yellow, LOW);
           break;
-        delay(250);
         // Add more cases if you have more characters/actions
       }
+      delay(250);
     }
   } else {
     if(message == "INPR") {
