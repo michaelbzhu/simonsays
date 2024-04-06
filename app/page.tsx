@@ -9,6 +9,18 @@ export default function Home() {
   const [gameState, setGameState] = useState<GameState>("titlepage");
   const game = getGameSingleton();
 
+  const testPing = async () => {
+    const formData = new FormData();
+    formData.append("message", "blue111");
+
+    const response = await fetch("/api/ping", {
+      method: "POST",
+      body: formData,
+    });
+
+    // const data = await response.json();
+  };
+
   const startGame = () => {
     setGameState("playing");
     game.resetGame();
@@ -28,6 +40,9 @@ export default function Home() {
         <p className="text-5xl py-4 mt-16">Simon Says</p>
         <div className="cursor-pointer" onClick={startGame}>
           [start game]
+        </div>
+        <div className="cursor-pointer" onClick={testPing}>
+          [test, send on222]
         </div>
       </div>
     );
